@@ -15,4 +15,5 @@ INSTALLED_APPS_CUSTOM = [
     'apps.finance',
     'apps.sln',
     'apps.transfer',
+    'apps.import_export',
 ]
