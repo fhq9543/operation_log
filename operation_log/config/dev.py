@@ -12,7 +12,7 @@ import os
 DB_HOST = os.environ.get('DB_HOST', '127.0.0.1')
 DB_PORT = os.environ.get('DB_PORT', '3306')
 DB_NAME = os.environ.get('DB_NAME', 'logrecord')
-DB_USER = os.environ.get('DB_USER', 'q')
+DB_USER = os.environ.get('DB_USER', 'root')
 DB_PWD = os.environ.get('DB_PWD', 'a')
 
 DATABASES = {
