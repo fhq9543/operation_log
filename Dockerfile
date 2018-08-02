@@ -1,4 +1,4 @@
-FROM fhq9543/docker-py36_alpline_mysqlclient
+FROM robo2025/python:3.6-alpine
 
 COPY . /project/operation_log
 
