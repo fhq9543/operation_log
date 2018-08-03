@@ -20,10 +20,10 @@ def switch_get(module, request):
         data = finance_record_get(request)
     elif module in SlnModuleList:
         data = sln_record_get(request)
-
-    data = 'Need a parameter of module.'
-
-    return APIResponse(rescode=res_code['error'], data=data)
+    else:
+        data = 'Need a parameter of module.'
+        return APIResponse(rescode=res_code['error'], data=data)
+    return data
 
 
 def switch_post(module, data):
