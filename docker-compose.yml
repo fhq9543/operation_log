@@ -12,3 +12,5 @@ services:
     env_file: common.env
     ports:
       - "8020:8000"
+    volumes:
+      - /opt/vol/operation_log:/project/operation_log/logs

@@ -15,4 +15,13 @@ INSTALLED_APPS_CUSTOM = [
     'apps.finance',
     'apps.sln',
     'apps.transfer',
+    'apps.import_export',
 ]
+
+# ===============================================================================
+# 日志级别
+# ===============================================================================
+# 本地开发环境日志级别
+LOG_LEVEL_DEVELOP = 'DEBUG'
+# 正式环境日志级别
+LOG_LEVEL_PRODUCT = os.environ.get('LOG_LEVEL', 'INFO')

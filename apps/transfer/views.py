@@ -7,10 +7,12 @@ from utils.http import APIResponse
 class RecordList(APIView):
     def get(self, request):
         module = request.query_params.get('module')
-        response = switch_get(module, request)
+        module_prefix = module.split('_')[0]
+        response = switch_get(module_prefix, request)
         return response
 
     def post(self, request):
         module = request.data['module']
-        data, status = switch_post(module, request.data)
+        module_prefix = module.split('_')[0]
+        data, status = switch_post(module_prefix, request.data)
         return APIResponse(rescode=status, data=data)

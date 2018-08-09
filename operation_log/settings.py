@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 import os
 import sys
 import ast
+from datetime import datetime
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -77,6 +78,7 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'libs.middlewares.exception.ExceptionMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
@@ -98,6 +100,24 @@ TEMPLATES = [
         },
     },
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+    ),
+    'EXCEPTION_HANDLER': 'libs.utils.exceptions.robo_exception_handler',
+
+    'NON_FIELD_ERRORS_KEY': ''
+
+    # 'DEFAULT_PERMISSION_CLASSES': (
+    #     'rest_framework.permissions.IsAuthenticated',
+    # ),
+    # 'DEFAULT_AUTHENTICATION_CLASSES': (
+    #     'rest_framework.authentication.SessionAuthentication',
+    #     'rest_framework.authentication.BasicAuthentication',
+    # ),
+
+}
 
 WSGI_APPLICATION = 'operation_log.wsgi.application'
 
@@ -139,3 +159,100 @@ USE_TZ = False
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+LOGGING_DIR = os.path.join(BASE_DIR, 'logs')
+
+if RUN_MODE == "DEVELOP":
+    LOG_LEVEL = LOG_LEVEL_DEVELOP
+    LOG_CLASS = 'logging.handlers.RotatingFileHandler'
+elif RUN_MODE == "PRODUCT":
+    # LOGGING_DIR = LOGGING_DIR_ENV  # 使用环境相关的LOGGING_DIR
+    LOG_LEVEL = LOG_LEVEL_PRODUCT
+    LOG_CLASS = 'logging.handlers.RotatingFileHandler'
+
+if not os.path.exists(LOGGING_DIR):
+    try:
+        os.makedirs(LOGGING_DIR)
+    except:
+        pass
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '%(levelname)s [%(asctime)s] %(pathname)s %(lineno)d %(funcName)s %(process)d %(thread)d \n \t %(message)s \n',
+            'datefmt': '%Y-%m-%d %H:%M:%S'
+        },
+        'simple': {
+            'format': '%(levelname)s %(message)s \n'
+        },
+    },
+    'handlers': {
+        'null': {
+            'level': 'DEBUG',
+            'class': 'logging.NullHandler',
+        },
+        'mail_admins': {
+            'level': 'ERROR',
+            'class': 'django.utils.log.AdminEmailHandler'
+        },
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple'
+        },
+        'root': {
+            'class': LOG_CLASS,
+            'formatter': 'verbose',
+            'filename': os.path.join(LOGGING_DIR, '%s.log' % datetime.now().strftime('%Y-%m-%d')),
+            'maxBytes': 1024 * 1024 * 10,
+            'backupCount': 5
+        },
+        'component': {
+            'class': LOG_CLASS,
+            'formatter': 'verbose',
+            'filename': os.path.join(LOGGING_DIR, 'component.log'),
+            'maxBytes': 1024 * 1024 * 10,
+            'backupCount': 5
+        },
+        'wb_mysql': {
+            'class': LOG_CLASS,
+            'formatter': 'verbose',
+            'filename': os.path.join(LOGGING_DIR, 'wb_mysql.log'),
+            'maxBytes': 1024 * 1024 * 4,
+            'backupCount': 5
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['null'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        'django.request': {
+            'handlers': ['console'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+        # the root logger ,用于整个project的logger
+        'root': {
+            'handlers': ['root'],
+            'level': LOG_LEVEL,
+            'propagate': True,
+        },
+        # 组件调用日志
+        'component': {
+            'handlers': ['component'],
+            'level': 'WARN',
+            'propagate': True,
+        },
+        # other loggers...
+        'django.db.backends': {
+            'handlers': ['wb_mysql'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+    }
+}
+
