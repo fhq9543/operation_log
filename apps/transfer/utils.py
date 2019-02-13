@@ -3,10 +3,12 @@ from apps.user.utils import user_record_get, user_record_post
 from apps.product.utils import product_record_get, product_record_post
 from apps.finance.utils import finance_record_get, finance_record_post
 from apps.sln.utils import sln_record_get, sln_record_post
+from apps.aggregatorCase.utils import aggregator_case_record_get, aggregator_case_record_post
 from utils.response import res_code
 from utils.http import APIResponse
 
-from .common import OrderModuleList, FinanceModuleList, UserModuleList, ProductModuleList, SlnModuleList
+from .common import OrderModuleList, FinanceModuleList, UserModuleList, ProductModuleList, \
+    SlnModuleList, AggregatorCaseModuleList
 
 
 def switch_get(module, request):
@@ -20,6 +22,8 @@ def switch_get(module, request):
         data = finance_record_get(request)
     elif module in SlnModuleList:
         data = sln_record_get(request)
+    elif module in AggregatorCaseModuleList:
+        data = aggregator_case_record_get(request)
     else:
         data = 'Need a parameter of module.'
         return APIResponse(rescode=res_code['error'], data=data)
@@ -37,5 +41,7 @@ def switch_post(module, data):
         return finance_record_post(data)
     elif module in SlnModuleList:
         return sln_record_post(data)
+    elif module in AggregatorCaseModuleList:
+        return aggregator_case_record_post(data)
     else:
         return 'Mudule not found!', res_code['error']

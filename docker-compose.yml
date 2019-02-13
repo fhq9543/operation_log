@@ -7,10 +7,12 @@
 version: "3"
 
 services:
-  web:
+  worker_test:
     build: .
-    env_file: common.env
-    ports:
-      - "8020:8000"
-    volumes:
-      - /opt/vol/operation_log:/project/operation_log/logs
+    env_file: test_common.env
+    command: /project/operation_log/test_celery.sh
+
+  worker_proc:
+    build: .
+    env_file: proc_common.env
+    command: /project/operation_log/proc_celery.sh

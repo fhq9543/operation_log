@@ -22,3 +22,6 @@ class ProductRecord(models.Model):
     extras = models.CharField(
         blank=True, null=True, max_length=500, verbose_name='其他参数', help_text='其他参数')
     create_time = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = 'product_records'

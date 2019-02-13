@@ -52,10 +52,11 @@ class ImportView(APIView):
         return response
 
     def post(self, request):
-        # extras转str存入数据库
+        # 如果extras是json就转str存入数据库
         if 'extras' in request.data.keys():
             if isinstance(request.data['extras'], dict):
                 request.data['extras'] = json.dumps(request.data['extras'])
+
         serializer = ImportRecordSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -105,10 +106,11 @@ class ExportView(APIView):
         return response
 
     def post(self, request):
-        # extras转str存入数据库
+        # 如果extras是json就转str存入数据库
         if 'extras' in request.data.keys():
             if isinstance(request.data['extras'], dict):
                 request.data['extras'] = json.dumps(request.data['extras'])
+
         serializer = ExportRecordSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()

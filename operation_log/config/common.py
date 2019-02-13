@@ -14,8 +14,10 @@ INSTALLED_APPS_CUSTOM = [
     'apps.user',
     'apps.finance',
     'apps.sln',
+    'apps.aggregatorCase',
     'apps.transfer',
     'apps.import_export',
+    'apps.proofing',
 ]
 
 # ===============================================================================

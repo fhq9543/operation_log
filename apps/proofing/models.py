@@ -1,8 +1,8 @@
 from django.db import models
 
 
-class FinanceRecord(models.Model):
-    """财务模块操作记录表"""
+class ProofingRecord(models.Model):
+    """云打样模块操作记录表"""
     module = models.CharField(
         max_length=20, verbose_name='操作模块', help_text='操作模块')
     key = models.CharField(
@@ -15,12 +15,8 @@ class FinanceRecord(models.Model):
         blank=True, null=True, max_length=30, verbose_name='操作员用户名', help_text='操作员用户名')
     platform = models.CharField(
         max_length=20, verbose_name='操作平台', help_text='操作平台')
-    amount = models.DecimalField(
-        default=0, max_digits=18, decimal_places=2, verbose_name='操作金额', help_text='操作金额')
     change_message = models.CharField(
         max_length=500, verbose_name='操作信息', help_text='操作信息')
-    key_subset = models.CharField(
-        blank=True, null=True, max_length=30, verbose_name='操作对象子集', help_text='操作对象子集')
     remark = models.CharField(
         blank=True, null=True, max_length=30, verbose_name='备注', help_text='备注')
     extras = models.CharField(
@@ -28,4 +24,4 @@ class FinanceRecord(models.Model):
     create_time = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        db_table = 'finance_records'
+        db_table = 'proofing_records'

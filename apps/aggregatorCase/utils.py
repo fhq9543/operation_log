@@ -1,5 +1,5 @@
-from .models import FinanceRecord
-from .serializers import FinanceRecordSerializer
+from .models import AggregatorCaseRecord
+from .serializers import AggregatorCaseRecordSerializer
 from utils.response import res_code
 from utils.http import get_limit, APIResponse, CONTENT_RANGE, CONTENT_TOTAL
 from utils.string_extension import safe_int
@@ -8,8 +8,8 @@ import time
 from apps.transfer.common import check_json_format
 
 
-def finance_record_get(request):
-    logs = FinanceRecord.objects.all()
+def aggregator_case_record_get(request):
+    logs = AggregatorCaseRecord.objects.all()
     offset = safe_int(request.query_params.get('offset', 0))
     limit = safe_int(request.query_params.get('limit', 15))
     limit = get_limit(limit)
@@ -37,7 +37,7 @@ def finance_record_get(request):
     total = logs.count()
     logs = logs.order_by('-create_time')[offset:offset + limit]
 
-    serializer = FinanceRecordSerializer(logs, many=True)
+    serializer = AggregatorCaseRecordSerializer(logs, many=True)
 
     # extras转为dict
     for data in serializer.data:
@@ -52,13 +52,13 @@ def finance_record_get(request):
     return response
 
 
-def finance_record_post(data):
+def aggregator_case_record_post(data):
     # 如果extras是json就转str存入数据库
     if 'extras' in data.keys():
         if isinstance(data['extras'], dict):
             data['extras'] = json.dumps(data['extras'])
 
-    serializer = FinanceRecordSerializer(data=data)
+    serializer = AggregatorCaseRecordSerializer(data=data)
     if serializer.is_valid():
         serializer.save()
         return serializer.data, res_code['success']

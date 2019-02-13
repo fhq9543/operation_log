@@ -7,7 +7,6 @@ import json
 import time
 from apps.transfer.common import check_json_format
 
-
 def order_record_get(request):
     logs = OrderRecord.objects.all()
     offset = safe_int(request.query_params.get('offset', 0))
@@ -15,6 +14,7 @@ def order_record_get(request):
     limit = get_limit(limit)
 
     module = request.query_params.get('module')
+    action_flag = request.query_params.get('action_flag')
     key = request.query_params.get('key')
     platform = request.query_params.get('platform')
     start_time = request.query_params.get('start_time')
@@ -26,6 +26,8 @@ def order_record_get(request):
         logs = logs.filter(key=key)
     if platform:
         logs = logs.filter(platform=platform)
+    if action_flag:
+        logs = logs.filter(action_flag=action_flag)
     if start_time and end_time:
         start_time += ' 00:00:00'
         end_time += ' 23:59:59'
@@ -50,10 +52,11 @@ def order_record_get(request):
 
 
 def order_record_post(data):
-    # extras转str存入数据库
+    # 如果extras是json就转str存入数据库
     if 'extras' in data.keys():
         if isinstance(data['extras'], dict):
             data['extras'] = json.dumps(data['extras'])
+
     serializer = OrderRecordSerializer(data=data)
     if serializer.is_valid():
         serializer.save()

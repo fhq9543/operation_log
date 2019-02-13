@@ -5,7 +5,7 @@ from django.conf import settings
 from django.contrib.auth.models import AnonymousUser
 from django.contrib.auth import get_user_model
 from utils.log import logger
-from utils.response import res_code, ResCode
+from utils.response import ResCode
 
 User = get_user_model()
 
@@ -34,7 +34,7 @@ def get_user(request):
     logger.debug('sso verify time:{} ms'.format((end - start) * 1000))
 
     rescode = result.get('rescode')
-    if rescode == res_code['success']:
+    if rescode == ResCode.Success:
         user_data = result.get('data')
         user = User()
         user.id = user_data.get('id')
@@ -42,7 +42,7 @@ def get_user(request):
         user.mobile = user_data.get('mobile')
         user.email = user_data.get('email')
         user.user_type = user_data.get('user_type')
-        user.is_superuser = user_data.get('is_superuser')
-        user.is_staff = user_data.get('is_staff')
-
+        user.is_subuser = user_data.get('is_subuser')
+        user.main_user_id = user_data.get('main_user_id')
+        user.permissions = user_data.get('permissions')
     return (user, result.get('msg'), status_code, rescode)

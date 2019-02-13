@@ -21,6 +21,9 @@ class ImportRecord(models.Model):
         blank=True, null=True, max_length=500, verbose_name='其他参数', help_text='其他参数')
     create_time = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        db_table = 'import_records'
+
 
 class ExportRecord(models.Model):
     """导出操作记录表"""
@@ -37,4 +40,7 @@ class ExportRecord(models.Model):
     extras = models.CharField(
         blank=True, null=True, max_length=500, verbose_name='其他参数', help_text='其他参数')
     create_time = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = 'export_records'
 

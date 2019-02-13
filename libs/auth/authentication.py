@@ -1,8 +1,6 @@
 """
 Provides various authentication policies.
 """
-from __future__ import unicode_literals
-
 from rest_framework import exceptions
 from rest_framework.authentication import BaseAuthentication
 
@@ -76,7 +74,7 @@ class AdminUserAuthentication(BaseAuthentication):
         }
         if not request.user.is_authenticated:
             raise exceptions.APIException(detail)
-        if request.user.user_type != 3:
+        if request.user.user_type != 3 and request.user.user_type != 4:
             detail['status_code'] = 403
             detail['rescode'] = ResCode.Access_Denied
             detail['msg'] = '非管理员用户，无权限访问'

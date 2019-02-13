@@ -23,6 +23,10 @@ SlnModuleList = (
     'sln',     # 方案
 )
 
+AggregatorCaseModuleList = (
+  'aggregator',  # 集成商
+  'case',  # 案例
+)
 
 def check_json_format(raw_msg):
     """

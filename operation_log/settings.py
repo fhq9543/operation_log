@@ -53,6 +53,8 @@ from .config.dev import *
 from .config.common import *
 from .config.prod import *
 
+from .celerycfg import *
+
 # 处理DB配置
 if RUN_MODE == "PRODUCT":
     # 数据库设置
@@ -68,13 +70,16 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'djcelery',
     'rest_framework',
+    'corsheaders'
 ]
 INSTALLED_APPS += INSTALLED_APPS_CUSTOM
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -100,6 +105,9 @@ TEMPLATES = [
         },
     },
 ]
+
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_EXPOSE_HEADERS = ['X-Content-Range', 'X-Content-Total']
 
 REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': (
@@ -255,4 +263,3 @@ LOGGING = {
         },
     }
 }
-
